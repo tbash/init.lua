@@ -14,7 +14,7 @@
   br = branch
   diff = diff --word-diff
   dc = diff --cached
-  oops = reset --hard HEAD~1
+  oops = reset HEAD^1
 [color]
   ui = true
 [color "diff"]

@@ -122,12 +122,12 @@ set statusline+=%*
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" benmills-vimux-2285cef
 " ctrlp.vim
-" deocomplete
+" dracula-theme
 " nerdtree
 " syntastic
 " vim-airline
+" vim-airline-themes
 " vim-bundler
 " vim-colors-solarized
 " vim-fugitive
@@ -187,7 +187,7 @@ let g:jsx_ext_required = 0
 
 let g:solarized_termcolors=256
 let g:solarized_termtrans=1
-let base16colorspace=256  " Access colors present in 256 colorspace"
+let base16colorspace=256  " Access colors present in 256 colorspace
 let g:solarized_contrast = "high"
 colorscheme solarized
 
@@ -196,7 +196,7 @@ let g:syntastic_error_symbol='×'
 let g:syntastic_warning_symbol='⚠'
 
 let g:airline_powerline_fonts = 1
-let g:airline_theme='bubblegum'
+let g:airline_theme='luna'
 let g:airline_right_alt_sep = ''
 let g:airline_right_sep = ''
 let g:airline_left_alt_sep= ''
