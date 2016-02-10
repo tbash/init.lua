@@ -23,12 +23,11 @@ alias eclim="$ECLIPSE/eclimd"
 
 forest_fire() {
   echo "This deletes all of the following branches:" && \
-  git for-each-ref --format="%(refname:short)" refs/heads/$1\*
-  confirm && git for-each-ref --format="%(refname:short)" refs/heads/$1\* | xargs git branch -D
+  git branch --list "$1"
+  confirm && git branch --list "$1" | xargs git branch -D
 }
 
-confirm () {
-  # call with a prompt string or use a default
+confirm() {
   read -r -p "${1:-Are you sure? [y/N]} " response
   case $response in
     [yY][eE][sS]|[yY])

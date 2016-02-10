@@ -142,9 +142,6 @@ set statusline+=%*
 " $ brew install the_silver_searcher
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" deoplete on start
-let g:deoplete#enable_at_startup = 1
-
 " The Silver Searcher
 if executable('ag')
   " Use ag over grep
@@ -166,12 +163,12 @@ nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 " bind \ (backward slash) to grep shortcut
 command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 
-nnoremap \ :Ag<SPACE>
+nnoremap \ :Ag<SPACE>-i<SPACE>
 
 " show hidden files in NERDTree
 let NERDTreeShowHidden=1
 " show NERDTree when vim opens
-autocmd VimEnter * NERDTree
+" autocmd VimEnter * NERDTree
 " keep NERDTree open in all tabs
 " autocmd BufWinEnter * NERDTreeMirror
 
