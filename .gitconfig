@@ -28,24 +28,24 @@
   local   = yellow
   remote  = magenta
 [user]
-	name = T. Brandon Ashley
-	email = tbash@knights.ucf.edu
+  name = T. Brandon Ashley
+  email = tbash@knights.ucf.edu
 [github]
-  user = kerrizor
+  user = tbash
 [credential]
   helper = osxkeychain
 [core]
   autocrlf = input
   editor = vim
-	excludesfile = /Users/tbashley/.gitignore_global
+  excludesfile = /Users/tbashley/.gitignore_global
 [merge]
   tool = opendiff
 [difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path =
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path =
 [rerere]
-	enabled = true
+  enabled = true
 [pull]
-	rebase = true
+  rebase = true
 [default]
   default = simple
