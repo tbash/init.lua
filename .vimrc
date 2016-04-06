@@ -79,8 +79,6 @@ set mat=2 " how many tenths of a second to blink
 " switch syntax highlighting on
 syntax on
 
-set encoding=utf8
-set t_Co=256 " Explicitly tell vim that the terminal supports 256 colors"
 set background=dark
 
 " set number " show line numbers
@@ -154,9 +152,6 @@ if executable('ag')
   let g:ctrlp_use_caching = 0
 endif
 
-" deocomplete on start
-let g:deocomplete#enable_at_startup = 1
-
 " bind K to grep word under cursor
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
@@ -184,7 +179,6 @@ let g:jsx_ext_required = 0
 
 let g:solarized_termcolors=256
 let g:solarized_termtrans=1
-let base16colorspace=256  " Access colors present in 256 colorspace
 let g:solarized_contrast = "high"
 colorscheme solarized
 
@@ -194,7 +188,3 @@ let g:syntastic_warning_symbol='⚠'
 
 let g:airline_powerline_fonts = 1
 let g:airline_theme='luna'
-let g:airline_right_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_left_alt_sep= ''
-let g:airline_left_sep = ''
