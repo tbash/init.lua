@@ -13,18 +13,18 @@ esac
 
 alias ll="ls -lahG"
 
-alias vim="TERM=xterm-256color nvim"
+export PATH="/usr/local/bin:$PATH"
+alias vim="nvim"
+alias top="htop"
 
-export PATH="$HOME/.rbenv/bin:$PATH"
+export GOPATH="$HOME/projects"
+export PATH="$HOME/.rbenv/bin:$GOPATH/bin:$PATH"
 eval "$(rbenv init -)"
-
-export ECLIPSE=/Applications/Eclipse.app/Contents/Eclipse
-alias eclim="$ECLIPSE/eclimd"
 
 forest_fire() {
   echo "This deletes all of the following branches:" && \
-  git branch --list "$1"
-  confirm && git branch --list "$1" | xargs git branch -D
+  git branch --list $1\*
+  confirm && git branch --list $1\* | xargs git branch -D
 }
 
 confirm() {
@@ -40,3 +40,6 @@ confirm() {
 }
 
 LS_COLORS=$LS_COLORS:'di=40;34:' ; export LS_COLORS
+export EDITOR=vim
+export ANDROID_HOME=/Users/tb/Library/Android/sdk
+export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools

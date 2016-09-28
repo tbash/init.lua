@@ -17,7 +17,7 @@ set textwidth=120
 " Tab control
 set smarttab " tab respects 'tabstop', 'shiftwidth', and 'softtabstop'
 set tabstop=2 " the visible width of tabs
-set softtabstop=2 " edit as if the tabs are 4 characters wide
+set softtabstop=2 " edit as if the tabs are 2 characters wide
 set shiftwidth=2 " number of spaces to use for indent and unindent
 set shiftround " round indent to a multiple of 'shiftwidth'
 set expandtab " say no to tabs
@@ -47,6 +47,9 @@ set pastetoggle=<F10>
 
 " Removes trailing whitespace on write (:w)
 autocmd BufWritePre * :%s/\s\+$//e
+
+" puts the caller
+nnoremap <leader>wtf oputs "#" * 90<c-m>puts caller<c-m>puts "#" * 90<esc>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => User Interface
@@ -152,8 +155,15 @@ if executable('ag')
   let g:ctrlp_use_caching = 0
 endif
 
+let g:deoplete#enable_at_startup = 1
+let g:monster#completion#rcodetools#backend = "async_rct_complete"
+let g:deoplete#sources#omni#input_patterns = {
+\   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
+\}
+
+
 " bind K to grep word under cursor
-nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+nnoremap K :Ag<SPACE>-i<SPACE>! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 " bind \ (backward slash) to grep shortcut
 command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
@@ -174,6 +184,9 @@ map <F2> :NERDTreeToggle <cr>
 " CtrlP ignore
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/.tmp/*,*/node_modules/*,*.keep,*.DS_Store,*/.git/*
 
+" Allow flow syntax highlighting
+let g:javascript_plugin_flow = 1
+
 " Allow .jsx syntax in .js files
 let g:jsx_ext_required = 0
 
@@ -183,8 +196,8 @@ let g:solarized_contrast = "high"
 colorscheme solarized
 
 let g:syntastic_javascript_checkers = ['jshint', 'jscs']
-let g:syntastic_error_symbol='×'
-let g:syntastic_warning_symbol='⚠'
+let g:syntastic_error_symbol='🔥'
+let g:syntastic_warning_symbol='❕'
 
 let g:airline_powerline_fonts = 1
-let g:airline_theme='luna'
+let g:airline_theme='ravenpower'
