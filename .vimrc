@@ -124,16 +124,19 @@ set statusline+=%*
 " => Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ctrlp.vim
-" dracula-theme
 " nerdtree
 " syntastic
 " vim-airline
 " vim-airline-themes
 " vim-bundler
 " vim-colors-solarized
+" vim-elixir
 " vim-fugitive
+" vim-javascript
 " vim-jsx
 " vim-rails
+" vim-surround
+" vimproc.vim
 """""""""""""" for powerline font install """""""""""""""""
 " $ git clone https://github.com/powerline/fonts.git
 " $ ./fonts/install.sh
@@ -179,6 +182,8 @@ let NERDTreeShowHidden=1
 
 " remove some files by extension
 let NERDTreeIgnore = ['\.js.map$']
+
+" map F2 key to toggle NERDTree
 map <F2> :NERDTreeToggle <cr>
 
 " CtrlP ignore
