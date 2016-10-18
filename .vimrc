@@ -193,6 +193,7 @@ let g:jsx_ext_required = 0
 let g:solarized_termcolors=256
 let g:solarized_termtrans=1
 let g:solarized_contrast = "high"
+" set background=light
 colorscheme solarized
 
 let g:syntastic_javascript_checkers = ['jshint', 'jscs']
