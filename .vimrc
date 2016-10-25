@@ -100,6 +100,8 @@ set smartindent
 set list
 set listchars=tab:⊨⇒,eol:¬
 
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files, backups, and undo
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -124,14 +126,15 @@ set statusline+=%*
 " => Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ctrlp.vim
+" gruvbox
 " nerdtree
 " syntastic
 " vim-airline
 " vim-airline-themes
 " vim-bundler
-" vim-colors-solarized
 " vim-elixir
 " vim-fugitive
+" vim-gitgutter
 " vim-javascript
 " vim-jsx
 " vim-rails
@@ -195,15 +198,11 @@ let g:javascript_plugin_flow = 1
 " Allow .jsx syntax in .js files
 let g:jsx_ext_required = 0
 
-let g:solarized_termcolors=256
-let g:solarized_termtrans=1
-let g:solarized_contrast = "high"
-" set background=light
-colorscheme solarized
+colorscheme gruvbox
 
 let g:syntastic_javascript_checkers = ['jshint', 'jscs']
 let g:syntastic_error_symbol='🔥'
 let g:syntastic_warning_symbol='❕'
 
 let g:airline_powerline_fonts = 1
-let g:airline_theme='ravenpower'
+let g:airline_theme='gruvbox'
