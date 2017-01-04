@@ -1,10 +1,6 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" load plugins with pathogen
-execute pathogen#infect()
-
 set nocompatible " not compatible with vi
 set autoread " detect when a file is changed
 
@@ -106,11 +102,11 @@ let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 " => Files, backups, and undo
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"set nobackup
-"set nowritebackup
-"set noswapfile
-set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+" set nobackup
+" set nowritebackup
+" set noswapfile
+" set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+" set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -125,29 +121,24 @@ set statusline+=%*
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ctrlp.vim
-" gruvbox
-" nerdtree
-" syntastic
-" vim-airline
-" vim-airline-themes
-" vim-bundler
-" vim-elixir
-" vim-fugitive
-" vim-gitgutter
-" vim-javascript
-" vim-jsx
-" vim-rails
-" vim-surround
-" vimproc.vim
-"""""""""""""" for powerline font install """""""""""""""""
-" $ git clone https://github.com/powerline/fonts.git
-" $ ./fonts/install.sh
-" Favorite font: Roboto Mono Med For Powerline
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Using the silver searcher in place of grep
-" $ brew install the_silver_searcher
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call plug#begin('~/.local/share/nvim/plugged')
+
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'morhetz/gruvbox'
+Plug 'vim-syntastic/syntastic'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'elixir-lang/vim-elixir'
+Plug 'slashmili/alchemist.vim'
+Plug 'vim-syntastic/syntastic'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'airblade/vim-gitgutter'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+
+call plug#end()
 
 " The Silver Searcher
 if executable('ag')
@@ -166,7 +157,6 @@ let g:monster#completion#rcodetools#backend = "async_rct_complete"
 let g:deoplete#sources#omni#input_patterns = {
 \   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
 \}
-
 
 " bind K to grep word under cursor
 nnoremap K :Ag<SPACE>-i<SPACE>! "\b<C-R><C-W>\b"<CR>:cw<CR>
@@ -206,3 +196,12 @@ let g:syntastic_warning_symbol='❕'
 
 let g:airline_powerline_fonts = 1
 let g:airline_theme='gruvbox'
+
+"""""""""""""" for powerline font install """""""""""""""""
+" $ git clone https://github.com/powerline/fonts.git
+" $ ./fonts/install.sh
+" Favorite font: Roboto Mono Med For Powerline
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Using the silver searcher in place of grep
+" $ brew install the_silver_searcher
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

@@ -3,7 +3,7 @@ export ZSH=/Users/tb/.oh-my-zsh
 
 ZSH_THEME="robbyrussell"
 DEFAULT_USER="tb"
-plugins=(git tmux heroku)
+plugins=(git tmux heroku postgres)
 
 export UPDATE_ZSH_DAYS=30
 ENABLE_CORRECTION="true"
@@ -12,12 +12,10 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 source $ZSH/oh-my-zsh.sh
 
 export GOPATH="$HOME/projects"
-export PATH="$HOME/.rbenv/bin:$GOPATH/bin:$PATH"
-eval "$(rbenv init -)"
-export EDITOR=vim
+export EDITOR=nvim
 export ANDROID_HOME=/Users/tb/Library/Android/sdk
 export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
-source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
+source "$HOME/.local/share/nvim/plugged/gruvbox/gruvbox_256palette.sh"
 
 alias git-pull-ls="ls | xargs -P10 -I{} git -C {} pull"
 alias vim="nvim"
