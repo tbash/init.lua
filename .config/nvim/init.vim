@@ -191,8 +191,8 @@ let g:jsx_ext_required = 0
 colorscheme gruvbox
 
 let g:syntastic_javascript_checkers = ['jshint', 'jscs']
-let g:syntastic_error_symbol='🔥'
-let g:syntastic_warning_symbol='❕'
+let g:syntastic_error_symbol='✕'
+let g:syntastic_warning_symbol='⚠︎'
 
 let g:airline_powerline_fonts = 1
 let g:airline_theme='gruvbox'
