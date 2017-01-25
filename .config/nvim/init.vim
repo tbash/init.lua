@@ -125,10 +125,6 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'morhetz/gruvbox'
-Plug 'vim-syntastic/syntastic'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'elixir-lang/vim-elixir'
 Plug 'slashmili/alchemist.vim'
 Plug 'vim-syntastic/syntastic'
@@ -137,6 +133,9 @@ Plug 'tpope/vim-surround'
 Plug 'airblade/vim-gitgutter'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
+Plug 'itchyny/lightline.vim'
+Plug 'junegunn/seoul256.vim'
+Plug 'elmcast/elm-vim'
 
 call plug#end()
 
@@ -152,12 +151,6 @@ if executable('ag')
   let g:ctrlp_use_caching = 0
 endif
 
-let g:deoplete#enable_at_startup = 1
-let g:monster#completion#rcodetools#backend = "async_rct_complete"
-let g:deoplete#sources#omni#input_patterns = {
-\   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
-\}
-
 " bind K to grep word under cursor
 nnoremap K :Ag<SPACE>-i<SPACE>! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
@@ -165,6 +158,120 @@ nnoremap K :Ag<SPACE>-i<SPACE>! "\b<C-R><C-W>\b"<CR>:cw<CR>
 command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 
 nnoremap \ :Ag<SPACE>-i<SPACE>
+
+let g:deoplete#enable_at_startup = 1
+let g:monster#completion#rcodetools#backend = "async_rct_complete"
+let g:deoplete#sources#omni#input_patterns = {
+\   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
+\}
+
+let g:lightline = {
+      \ 'colorscheme': 'seoul256',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
+      \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
+      \ },
+      \ 'component_function': {
+      \   'fugitive': 'LightlineFugitive',
+      \   'filename': 'LightlineFilename',
+      \   'fileformat': 'LightlineFileformat',
+      \   'filetype': 'LightlineFiletype',
+      \   'fileencoding': 'LightlineFileencoding',
+      \   'mode': 'LightlineMode',
+      \   'ctrlpmark': 'CtrlPMark',
+      \ },
+      \ 'component_expand': {
+      \   'syntastic': 'SyntasticStatuslineFlag',
+      \ },
+      \ 'component_type': {
+      \   'syntastic': 'error',
+      \ },
+      \ 'subseparator': { 'left': '|', 'right': '|' }
+      \ }
+
+function! LightlineModified()
+  return &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+
+function! LightlineReadonly()
+  return &ft !~? 'help' && &readonly ? "\ue0a2" : ''
+endfunction
+
+function! LightlineFilename()
+  let fname = expand('%:t')
+  return fname == 'ControlP' && has_key(g:lightline, 'ctrlp_item') ? g:lightline.ctrlp_item :
+        \ fname =~ 'NERD_tree' ? '' :
+        \ ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
+        \ ('' != fname ? fname : '[No Name]') .
+        \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
+endfunction
+
+function! LightlineFugitive()
+  try
+    if expand('%:t') !~? 'NERD'  && exists('*fugitive#head')
+      let mark = ''  " edit here for cool mark
+      let branch = fugitive#head()
+      return branch !=# '' ? mark.branch : ''
+    endif
+  catch
+  endtry
+  return ''
+endfunction
+
+function! LightlineFileformat()
+  return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+function! LightlineFiletype()
+  return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+endfunction
+
+function! LightlineFileencoding()
+  return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
+endfunction
+
+function! LightlineMode()
+  let fname = expand('%:t')
+  return fname == 'ControlP' ? 'CtrlP' :
+        \ fname =~ 'NERD_tree' ? 'NERDTree' :
+        \ winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+
+function! CtrlPMark()
+  if expand('%:t') =~ 'ControlP' && has_key(g:lightline, 'ctrlp_item')
+    call lightline#link('iR'[g:lightline.ctrlp_regex])
+    return lightline#concatenate([g:lightline.ctrlp_prev, g:lightline.ctrlp_item
+          \ , g:lightline.ctrlp_next], 0)
+  else
+    return ''
+  endif
+endfunction
+
+let g:ctrlp_status_func = {
+  \ 'main': 'CtrlPStatusFunc_1',
+  \ 'prog': 'CtrlPStatusFunc_2',
+  \ }
+
+function! CtrlPStatusFunc_1(focus, byfname, regex, prev, item, next, marked)
+  let g:lightline.ctrlp_regex = a:regex
+  let g:lightline.ctrlp_prev = a:prev
+  let g:lightline.ctrlp_item = a:item
+  let g:lightline.ctrlp_next = a:next
+  return lightline#statusline(0)
+endfunction
+
+function! CtrlPStatusFunc_2(str)
+  return lightline#statusline(0)
+endfunction
+
+function! s:syntastic()
+  SyntasticCheck
+  call lightline#update()
+endfunction
+
+colo seoul256
+
+let g:elm_format_autosave = 1
 
 " show hidden files in NERDTree
 let NERDTreeShowHidden=1
@@ -188,14 +295,12 @@ let g:javascript_plugin_flow = 1
 " Allow .jsx syntax in .js files
 let g:jsx_ext_required = 0
 
-colorscheme gruvbox
-
 let g:syntastic_javascript_checkers = ['jshint', 'jscs']
 let g:syntastic_error_symbol='✕'
 let g:syntastic_warning_symbol='⚠︎'
-
-let g:airline_powerline_fonts = 1
-let g:airline_theme='gruvbox'
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:elm_syntastic_show_warnings = 1
 
 """""""""""""" for powerline font install """""""""""""""""
 " $ git clone https://github.com/powerline/fonts.git
