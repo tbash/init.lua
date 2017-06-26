@@ -1,9 +1,8 @@
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-export ZSH=/Users/tb/.oh-my-zsh
+export ZSH=/Users/brandonashley/.dotfiles/oh-my-zsh
 
 ZSH_THEME="robbyrussell"
-DEFAULT_USER="tb"
-plugins=(git tmux heroku postgres)
+DEFAULT_USER="brandonashley"
+plugins=(git tmux postgres)
 
 export UPDATE_ZSH_DAYS=30
 ENABLE_CORRECTION="true"
@@ -15,7 +14,6 @@ export GOPATH="$HOME/projects"
 export EDITOR=nvim
 export ANDROID_HOME=/Users/tb/Library/Android/sdk
 export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
-source "$HOME/.local/share/nvim/plugged/gruvbox/gruvbox_256palette.sh"
 
 alias git-pull-ls="ls | xargs -P10 -I{} git -C {} pull"
 alias vim="nvim"

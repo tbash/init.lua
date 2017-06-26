@@ -44,9 +44,6 @@ set pastetoggle=<F10>
 " Removes trailing whitespace on write (:w)
 autocmd BufWritePre * :%s/\s\+$//e
 
-" puts the caller
-nnoremap <leader>wtf oputs "#" * 90<c-m>puts caller<c-m>puts "#" * 90<esc>
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => User Interface
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -115,7 +112,6 @@ let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 set laststatus=2 " show the satus line all the time
 set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -125,20 +121,26 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'elixir-lang/vim-elixir'
-Plug 'slashmili/alchemist.vim'
-Plug 'vim-syntastic/syntastic'
+Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
-Plug 'airblade/vim-gitgutter'
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
+Plug 'sbdchd/neoformat'
+Plug 'w0rp/ale'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/seoul256.vim'
+Plug 'mxw/vim-jsx'
+Plug 'pangloss/vim-javascript'
+Plug 'elixir-lang/vim-elixir'
 Plug 'elmcast/elm-vim'
 
 call plug#end()
 
+" Prettier call stuff here
+" autocmd BufWritePre *.js exe "normal! gggqG\<C-o>\<C-o>"
+" autocmd FileType javascript setlocal formatprg=prettier\ --stdin\ --single-quote\ --trailing-comma\ all
+
+" Using the silver searcher in place of grep
+" $ brew install the_silver_searcher
 " The Silver Searcher
 if executable('ag')
   " Use ag over grep
@@ -169,7 +171,7 @@ let g:lightline = {
       \ 'colorscheme': 'seoul256',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
-      \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
+      \   'right': [ [ 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
       \ },
       \ 'component_function': {
       \   'fugitive': 'LightlineFugitive',
@@ -179,12 +181,6 @@ let g:lightline = {
       \   'fileencoding': 'LightlineFileencoding',
       \   'mode': 'LightlineMode',
       \   'ctrlpmark': 'CtrlPMark',
-      \ },
-      \ 'component_expand': {
-      \   'syntastic': 'SyntasticStatuslineFlag',
-      \ },
-      \ 'component_type': {
-      \   'syntastic': 'error',
       \ },
       \ 'subseparator': { 'left': '|', 'right': '|' }
       \ }
@@ -264,21 +260,12 @@ function! CtrlPStatusFunc_2(str)
   return lightline#statusline(0)
 endfunction
 
-function! s:syntastic()
-  SyntasticCheck
-  call lightline#update()
-endfunction
-
 colo seoul256
 
 let g:elm_format_autosave = 1
 
 " show hidden files in NERDTree
 let NERDTreeShowHidden=1
-" show NERDTree when vim opens
-" autocmd VimEnter * NERDTree
-" keep NERDTree open in all tabs
-" autocmd BufWinEnter * NERDTreeMirror
 
 " remove some files by extension
 let NERDTreeIgnore = ['\.js.map$']
@@ -294,19 +281,3 @@ let g:javascript_plugin_flow = 1
 
 " Allow .jsx syntax in .js files
 let g:jsx_ext_required = 0
-
-let g:syntastic_javascript_checkers = ['jshint', 'jscs']
-let g:syntastic_error_symbol='✕'
-let g:syntastic_warning_symbol='⚠︎'
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:elm_syntastic_show_warnings = 1
-
-"""""""""""""" for powerline font install """""""""""""""""
-" $ git clone https://github.com/powerline/fonts.git
-" $ ./fonts/install.sh
-" Favorite font: Roboto Mono Med For Powerline
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Using the silver searcher in place of grep
-" $ brew install the_silver_searcher
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
