@@ -28,16 +28,18 @@
   local   = yellow
   remote  = magenta
 [user]
-  name  = T. Brandon Ashley
+  name  = Brandon Ashley
   email = tb@tba.sh
 [github]
+  user = tbash
+[gitlab]
   user = tbash
 [credential]
   helper = osxkeychain
 [core]
   autocrlf = input
   editor = vim
-  excludesfile = /Users/tbashley/.gitignore_global
+  excludesfile = /Users/brandonashley/.gitignore_global
 [merge]
   tool = opendiff
 [difftool "sourcetree"]
@@ -49,3 +51,5 @@
   rebase = true
 [default]
   default = simple
+[push]
+  default = current
