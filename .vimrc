@@ -44,6 +44,9 @@ set pastetoggle=<F10>
 " Removes trailing whitespace on write (:w)
 autocmd BufWritePre * :%s/\s\+$//e
 
+" Silence error bells
+set belloff=all
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => User Interface
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -77,7 +80,6 @@ syntax on
 
 set background=dark
 
-" set number " show line numbers
 " set relativenumber " show relative line numbers
 set number " show the current line number"
 
@@ -92,8 +94,6 @@ set smartindent
 " show my invisible chars
 set list
 set listchars=tab:⊨⇒,eol:¬
-
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files, backups, and undo
@@ -117,27 +117,30 @@ set statusline+=%*
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-call plug#begin('~/.local/share/nvim/plugged')
+call plug#begin('~/.vim/plugged')
 
-Plug 'ctrlpvim/ctrlp.vim'
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'mileszs/ack.vim'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
-Plug 'sbdchd/neoformat'
 Plug 'w0rp/ale'
 Plug 'itchyny/lightline.vim'
-Plug 'junegunn/seoul256.vim'
+Plug 'dracula/vim'
 Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
 Plug 'elixir-lang/vim-elixir'
 Plug 'elmcast/elm-vim'
+Plug 'purescript-contrib/purescript-vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'mhinz/vim-mix-format'
 
 call plug#end()
 
-" Prettier call stuff here
-" autocmd BufWritePre *.js exe "normal! gggqG\<C-o>\<C-o>"
-" autocmd FileType javascript setlocal formatprg=prettier\ --stdin\ --single-quote\ --trailing-comma\ all
+let g:dracula_italic = 0
+colorscheme dracula
 
 " Using the silver searcher in place of grep
 " $ brew install the_silver_searcher
@@ -146,31 +149,20 @@ if executable('ag')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
 
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
+  " Use ag in ack.vim
+  let g:ackprg = 'ag --vimgrep'
 endif
 
 " bind K to grep word under cursor
-nnoremap K :Ag<SPACE>-i<SPACE>! "\b<C-R><C-W>\b"<CR>:cw<CR>
+nnoremap K :Ack<SPACE>-i<SPACE>! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
-" bind \ (backward slash) to grep shortcut
-command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
-
-nnoremap \ :Ag<SPACE>-i<SPACE>
-
-let g:deoplete#enable_at_startup = 1
-let g:monster#completion#rcodetools#backend = "async_rct_complete"
-let g:deoplete#sources#omni#input_patterns = {
-\   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
-\}
+" bind \\ (backward slash) to grep shortcut
+nnoremap \\ :Ack<SPACE>-i<SPACE>
 
 let g:lightline = {
-      \ 'colorscheme': 'seoul256',
+      \ 'colorscheme': 'Dracula',
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
+      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ],
       \   'right': [ [ 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
       \ },
       \ 'component_function': {
@@ -180,7 +172,6 @@ let g:lightline = {
       \   'filetype': 'LightlineFiletype',
       \   'fileencoding': 'LightlineFileencoding',
       \   'mode': 'LightlineMode',
-      \   'ctrlpmark': 'CtrlPMark',
       \ },
       \ 'subseparator': { 'left': '|', 'right': '|' }
       \ }
@@ -195,8 +186,7 @@ endfunction
 
 function! LightlineFilename()
   let fname = expand('%:t')
-  return fname == 'ControlP' && has_key(g:lightline, 'ctrlp_item') ? g:lightline.ctrlp_item :
-        \ fname =~ 'NERD_tree' ? '' :
+  return fname =~ 'NERD_tree' ? '' :
         \ ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
         \ ('' != fname ? fname : '[No Name]') .
         \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
@@ -228,41 +218,24 @@ endfunction
 
 function! LightlineMode()
   let fname = expand('%:t')
-  return fname == 'ControlP' ? 'CtrlP' :
-        \ fname =~ 'NERD_tree' ? 'NERDTree' :
+  return fname =~ 'NERD_tree' ? 'NERDTree' :
         \ winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 
-function! CtrlPMark()
-  if expand('%:t') =~ 'ControlP' && has_key(g:lightline, 'ctrlp_item')
-    call lightline#link('iR'[g:lightline.ctrlp_regex])
-    return lightline#concatenate([g:lightline.ctrlp_prev, g:lightline.ctrlp_item
-          \ , g:lightline.ctrlp_next], 0)
-  else
-    return ''
-  endif
-endfunction
-
-let g:ctrlp_status_func = {
-  \ 'main': 'CtrlPStatusFunc_1',
-  \ 'prog': 'CtrlPStatusFunc_2',
+" ALE Stuff
+let g:ale_pattern_options = {
+  \ '\.elm$': { 'ale_fixers': []}
   \ }
 
-function! CtrlPStatusFunc_1(focus, byfname, regex, prev, item, next, marked)
-  let g:lightline.ctrlp_regex = a:regex
-  let g:lightline.ctrlp_prev = a:prev
-  let g:lightline.ctrlp_item = a:item
-  let g:lightline.ctrlp_next = a:next
-  return lightline#statusline(0)
-endfunction
+let g:ale_fixers = {}
+let g:ale_fixers['javascript'] = ['prettier']
 
-function! CtrlPStatusFunc_2(str)
-  return lightline#statusline(0)
-endfunction
+let g:ale_fix_on_save = 1
 
-colo seoul256
+" let g:elm_format_autosave=0
 
-let g:elm_format_autosave = 1
+let g:mix_format_on_save = 1
+let g:mix_format_options = '--check-equivalent'
 
 " show hidden files in NERDTree
 let NERDTreeShowHidden=1
@@ -273,7 +246,7 @@ let NERDTreeIgnore = ['\.js.map$']
 " map F2 key to toggle NERDTree
 map <F2> :NERDTreeToggle <cr>
 
-" CtrlP ignore
+" Search ignore
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/.tmp/*,*/node_modules/*,*.keep,*.DS_Store,*/.git/*
 
 " Allow flow syntax highlighting
@@ -281,3 +254,7 @@ let g:javascript_plugin_flow = 1
 
 " Allow .jsx syntax in .js files
 let g:jsx_ext_required = 0
+
+" fzf.vim keybindings
+nmap ; :Buffers<CR>
+nnoremap <c-p> :GFiles<cr>
