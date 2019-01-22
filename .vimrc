@@ -100,8 +100,8 @@ set listchars=tab:⊨⇒,eol:¬
 " set nobackup
 " set nowritebackup
 " set noswapfile
-" set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-" set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -158,7 +158,9 @@ if executable('rg')
         \           : fzf#vim#with_preview('right:50%:hidden', '?'),
         \   <bang>0)
 
-  nnoremap <C-p>a :Rg
+  nnoremap <c-f> :Rg<cr>
+
+  let $FZF_DEFAULT_COMMAND = 'rg --files'
 endif
 
 " bind K to ack word under cursor
@@ -166,6 +168,10 @@ nnoremap K :Ack<SPACE>-i<SPACE>! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 " bind \\ (backward slash) to ack shortcut
 nnoremap \\ :Ack<SPACE>-i<SPACE>
+
+" fzf.vim keybindings
+nmap ; :Buffers<CR>
+nnoremap <c-p> :Files<cr>
 
 let g:lightline = {
       \ 'colorscheme': 'Dracula',
@@ -262,7 +268,3 @@ let g:javascript_plugin_flow = 1
 
 " Allow .jsx syntax in .js files
 let g:jsx_ext_required = 0
-
-" fzf.vim keybindings
-nmap ; :Buffers<CR>
-nnoremap <c-p> :GFiles<cr>
