@@ -78,8 +78,6 @@ set mat=2 " how many tenths of a second to blink
 " switch syntax highlighting on
 syntax on
 
-set background=dark
-
 " set relativenumber " show relative line numbers
 set number " show the current line number"
 
@@ -142,21 +140,31 @@ call plug#end()
 let g:dracula_italic = 0
 colorscheme dracula
 
-" Using the silver searcher in place of grep
-" $ brew install the_silver_searcher
-" The Silver Searcher
-if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
+" Using the ripgrep in place of grep
+" $ brew install ripgrep
+if executable('rg')
+  " Use rg over grep
+  set grepprg=rg\ --vimgrep\ --no-heading
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
 
-  " Use ag in ack.vim
-  let g:ackprg = 'ag --vimgrep'
+  " Use rg in ack.vim
+  let g:ackprg = 'rg --vimgrep --no-heading'
+
+  " Use rg with fzf.vim
+  command! -bang -nargs=* Rg
+        \ call fzf#vim#grep(
+        \   'rg --column --line-number --no-heading --color=always --ignore-case '.shellescape(<q-args>), 1,
+        \   <bang>0 ? fzf#vim#with_preview('up:60%')
+        \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+        \   <bang>0)
+
+  nnoremap <C-p>a :Rg
 endif
 
-" bind K to grep word under cursor
+" bind K to ack word under cursor
 nnoremap K :Ack<SPACE>-i<SPACE>! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
-" bind \\ (backward slash) to grep shortcut
+" bind \\ (backward slash) to ack shortcut
 nnoremap \\ :Ack<SPACE>-i<SPACE>
 
 let g:lightline = {
