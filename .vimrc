@@ -33,16 +33,13 @@ set ttyfast
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
 " code folding settings
-set foldmethod=syntax " fold based on indent
+set foldmethod=indent " fold based on indent
 set foldnestmax=10 " deepest fold is 10 levels
 set nofoldenable " don't fold by default
 set foldlevel=1
 
 " set no indet for paste mode mapped to F10
 set pastetoggle=<F10>
-
-" Removes trailing whitespace on write (:w)
-autocmd BufWritePre * :%s/\s\+$//e
 
 " Silence error bells
 set belloff=all
@@ -115,7 +112,7 @@ set statusline+=%*
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.local/share/nvim/plugged')
 
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
@@ -126,14 +123,13 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'w0rp/ale'
 Plug 'itchyny/lightline.vim'
-Plug 'dracula/vim'
+Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
-Plug 'elixir-lang/vim-elixir'
+Plug 'elixir-editors/vim-elixir'
 Plug 'elmcast/elm-vim'
 Plug 'purescript-contrib/purescript-vim'
 Plug 'leafgarland/typescript-vim'
-Plug 'mhinz/vim-mix-format'
 
 call plug#end()
 
@@ -174,7 +170,7 @@ nmap ; :Buffers<CR>
 nnoremap <c-p> :Files<cr>
 
 let g:lightline = {
-      \ 'colorscheme': 'Dracula',
+      \ 'colorscheme': 'dracula',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ],
       \   'right': [ [ 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
@@ -237,19 +233,20 @@ function! LightlineMode()
 endfunction
 
 " ALE Stuff
-let g:ale_pattern_options = {
-  \ '\.elm$': { 'ale_fixers': []}
-  \ }
+let g:ale_linters = {}
+let g:ale_linters.elixir = ['elixir-ls']
 
-let g:ale_fixers = {}
-let g:ale_fixers['javascript'] = ['prettier']
+let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']}
+let g:ale_fixers.javascript = ['prettier']
+let g:ale_fixers.elm = ['format']
+let g:ale_fixers.elixir = ['mix_format']
+
+let g:ale_elixir_elixir_ls_release = $HOME.'/.elixir_ls/rel'
 
 let g:ale_fix_on_save = 1
 
-" let g:elm_format_autosave=0
-
-let g:mix_format_on_save = 1
-let g:mix_format_options = '--check-equivalent'
+set completeopt=menu,menuone,preview,noselect,noinsert
+let g:ale_completion_enabled = 1
 
 " show hidden files in NERDTree
 let NERDTreeShowHidden=1
