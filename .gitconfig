@@ -18,18 +18,19 @@
 [color]
   ui = true
 [color "diff"]
-  meta       = yellow bold
-  frag       = magenta bold
-  old        = red reverse
-  new        = green reverse
+  meta = yellow bold
+  frag = magenta bold
+  old = red reverse
+  new = green reverse
   whitespace = white reverse
 [color "branch"]
   current = green reverse
-  local   = yellow
-  remote  = magenta
+  local = yellow
+  remote = magenta
 [user]
-  name  = Brandon Ashley
+  name = Brandon Ashley
   email = tb@tba.sh
+  signingkey = /Users/tbash/.ssh/id_ed25519.pub
 [github]
   user = tbash
 [gitlab]
@@ -39,7 +40,7 @@
 [core]
   autocrlf = input
   editor = vim
-  excludesfile = /Users/brandonashley/.gitignore_global
+  excludesfile = /Users/tbash/.gitignore_global
 [merge]
   tool = opendiff
 [difftool "sourcetree"]
@@ -53,3 +54,7 @@
   default = simple
 [push]
   default = current
+[gpg]
+  format = ssh
+[commit]
+  gpgsign = true
