@@ -51,7 +51,15 @@ require('packer').startup(function(use)
   use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
   use 'lukas-reineke/lsp-format.nvim' -- Used for autoformatting on save
   use 'tpope/vim-sleuth' -- Detect tabstop and shiftwidth automatically
-  use 'tpope/vim-surround' -- Mappings for easy surround.
+  use 'tpope/vim-surround' -- Mappings for easy surround
+  use 'vim-test/vim-test' -- Bindings for testing
+
+  use {
+    'nvim-tree/nvim-tree.lua',
+    requires = {
+      'nvim-tree/nvim-web-devicons', -- optional, for file icons
+    },
+  }
 
   -- Fuzzy Finder (files, lsp, etc)
   use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
@@ -86,13 +94,17 @@ end
 -- Automatically source and re-compile packer whenever you save this init.lua
 local packer_group = vim.api.nvim_create_augroup('Packer', { clear = true })
 vim.api.nvim_create_autocmd('BufWritePost', {
-  command = 'source <afile> | PackerCompile',
+  command = 'source <afile> | silent! LspStop | silent! LspStart | PackerCompile',
   group = packer_group,
   pattern = vim.fn.expand '$MYVIMRC',
 })
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
+
+-- disable netrw
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -144,6 +156,11 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 1 ? 'gj' : 'j'", { expr = true, silent = true })
 
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
+  pattern = '*.eex',
+  command = 'set filetype=heex'
+})
+
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
@@ -168,6 +185,9 @@ require('lualine').setup {
 
 -- Enable Comment.nvim
 require('Comment').setup()
+
+-- Enable nvim-tree
+require('nvim-tree').setup()
 
 -- Enable `lukas-reineke/indent-blankline.nvim`
 -- See `:help indent_blankline.txt`
@@ -222,6 +242,7 @@ vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { de
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<C-f>', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+vim.keymap.set('n', '<F2>', require('nvim-tree').toggle, { desc = 'Open File Explorer Tree' })
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -295,6 +316,8 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(client, bufnr)
+
+
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
   -- many times.
@@ -308,6 +331,11 @@ local on_attach = function(client, bufnr)
 
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
+
+  -- Hookup lsp-format on_attach
+  require('lsp-format').on_attach(client)
+  nmap('<leader>f', [[:Format<CR>]], '[F]ormat')
+  vim.cmd [[cabbrev wq execute "Format sync" <bar> wq]]
 
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
@@ -330,12 +358,6 @@ local on_attach = function(client, bufnr)
   nmap('<leader>wl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
-
-  -- Hookup lsp-format on_attach
-  require("lsp-format").on_attach(client)
-
-  -- Format automatically on write
-  vim.cmd [[cabbrev wq execute "Format sync" <bar> wq]]
 end
 
 -- Setup lsp-format
@@ -358,10 +380,50 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 for _, lsp in ipairs(servers) do
-  require('lspconfig')[lsp].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-  }
+  local config = require('lspconfig')[lsp]
+
+  if lsp == 'tailwindcss' then
+    config.setup {
+      on_attach = on_attach,
+      capabilities = capabilities,
+      filetypes = {
+        'eelixir', 'elixir', 'elm', 'html', 'html-eex', 'heex', 'css', 'postcss', 'javascript',
+        'javascriptreact', 'reason', 'rescript', 'typescript', 'typescriptreact'
+      },
+      init_options = {
+        userLanguages = {
+          elm = "html",
+          html = "html"
+        }
+      },
+      settings = {
+        tailwindCSS = {
+          includeLanguages = {
+            elm = "html",
+            html = "html"
+          },
+          classAttributes = { "class", "className", "classList" },
+          experimental = {
+            classRegex = {
+              "\\bclass[\\s(<|]+\"([^\"]*)\"",
+              "\\bclass[\\s(]+\"[^\"]*\"[\\s+]+\"([^\"]*)\"",
+              "\\bclass[\\s<|]+\"[^\"]*\"\\s*\\+{2}\\s*\" ([^\"]*)\"",
+              "\\bclass[\\s<|]+\"[^\"]*\"\\s*\\+{2}\\s*\" [^\"]*\"\\s*\\+{2}\\s*\" ([^\"]*)\"",
+              "\\bclass[\\s<|]+\"[^\"]*\"\\s*\\+{2}\\s*\" [^\"]*\"\\s*\\+{2}\\s*\" [^\"]*\"\\s*\\+{2}\\s*\" ([^\"]*)\"",
+              "\\bclassList[\\s\\[\\(]+\"([^\"]*)\"",
+              "\\bclassList[\\s\\[\\(]+\"[^\"]*\",\\s[^\\)]+\\)[\\s\\[\\(,]+\"([^\"]*)\"",
+              "\\bclassList[\\s\\[\\(]+\"[^\"]*\",\\s[^\\)]+\\)[\\s\\[\\(,]+\"[^\"]*\",\\s[^\\)]+\\)[\\s\\[\\(,]+\"([^\"]*)\""
+            }
+          }
+        }
+      }
+    }
+  else
+    config.setup {
+      on_attach = on_attach,
+      capabilities = capabilities,
+    }
+  end
 end
 
 -- Turn on lsp status information
@@ -440,6 +502,11 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
+
+
+-- vim-test shortcuts
+vim.keymap.set('n', '<leader>t', ':TestNearest -strategy=neovim<CR>')
+vim.keymap.set('n', '<leader>T', ':TestFile -strategy=neovim<CR>')
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
