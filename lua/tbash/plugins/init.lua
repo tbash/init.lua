@@ -26,7 +26,6 @@ require("lazy").setup {
   require "tbash.plugins.dadbod",
   require "tbash.plugins.gitsigns",
   require "tbash.plugins.lspconfig",
-  require "tbash.plugins.lualine",
   require "tbash.plugins.mason",
   require "tbash.plugins.telescope",
   require "tbash.plugins.tree",
