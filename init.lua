@@ -563,7 +563,10 @@ require("lazy").setup {
           "markdown",
           "markdown_inline",
         },
-        highlight = { enable = true },
+        highlight = {
+          enable = true,
+          additional_vim_regex_highlighting = false,
+        },
         indent = { enable = true },
         autotag = { enable = true, enable_close_on_slash = false },
       }
@@ -603,6 +606,22 @@ require("lazy").setup {
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       require("nvim-tree").setup()
+    end,
+  },
+
+  {
+    "nvim-lualine/lualine.nvim",
+    lazy = false,
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("lualine").setup {
+        options = {
+          icons_enabled = true,
+          theme = "catppuccin",
+          section_separators = "",
+          component_separators = "",
+        },
+      }
     end,
   },
 
