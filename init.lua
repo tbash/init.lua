@@ -1,9 +1,13 @@
 -- Basic settings
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 vim.o.clipboard = "unnamedplus"
 vim.opt.cursorline = true
+vim.opt.fillchars = { eob = " " }
 vim.opt.ignorecase = true
+vim.opt.smartcase = true
 vim.opt.incsearch = true
 vim.opt.mouse = "a"
 vim.opt.expandtab = true
@@ -587,6 +591,18 @@ require("lazy").setup {
           untracked = { text = "│" },
         },
       }
+    end,
+  },
+
+  {
+    "nvim-tree/nvim-tree.lua",
+    cmd = { "NvimTreeToggle", "NvimTreeFocus" },
+    keys = {
+      { "<C-n>", "<cmd> NvimTreeToggle <CR>", desc = "Toggle nvimtree" },
+    },
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("nvim-tree").setup()
     end,
   },
 
