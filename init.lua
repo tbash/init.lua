@@ -207,6 +207,13 @@ require("lazy").setup {
           }
         end,
       },
+
+      -- Sorta hack to reuse on_attach defined in config field below
+      {
+        "elixir-tools/elixir-tools.nvim",
+        version = "*",
+        event = { "BufReadPre", "BufNewFile" },
+      },
     },
     config = function()
       local lspconfig = require "lspconfig"
@@ -296,8 +303,8 @@ require("lazy").setup {
       }
 
       lspconfig.tailwindcss.setup {
-        capabilities = capabilities,
         on_attach = on_attach,
+        capabilities = capabilities,
         settings = {
           tailwindCSS = {
             validate = true,
@@ -352,6 +359,22 @@ require("lazy").setup {
             elm = "html",
             html = "html",
           },
+        },
+      }
+
+      local elixir = require "elixir"
+      local elixirls = require "elixir.elixirls"
+
+      elixir.setup {
+        nextls = { enable = true },
+        credo = {},
+        elixirls = {
+          enable = true,
+          settings = elixirls.settings {
+            dialyzerEnabled = false,
+            enableTestLenses = true,
+          },
+          on_attach = on_attach,
         },
       }
     end,
@@ -474,7 +497,7 @@ require("lazy").setup {
   -- Fuzzy finder
   {
     "nvim-telescope/telescope.nvim",
-    lazy = false,
+    event = "VeryLazy",
     keys = {
       { "<C-p>", "<cmd>Telescope find_files<cr>", desc = "Find files" },
       { "<C-f>", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
@@ -507,15 +530,6 @@ require("lazy").setup {
           },
         },
       }
-
-      -- Open Telescope on start
-      vim.api.nvim_create_autocmd("VimEnter", {
-        callback = function()
-          if vim.fn.argv(0) == "" then
-            require("telescope.builtin").find_files()
-          end
-        end,
-      })
     end,
   },
 
