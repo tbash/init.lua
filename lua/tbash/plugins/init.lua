@@ -15,9 +15,23 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup {
   "tpope/vim-sleuth",
-  "tpope/vim-rhubarb",
-  "tpope/vim-fugitive",
   "tpope/vim-surround",
+
+  {
+    "tpope/vim-fugitive",
+    cmd = {
+      "Git",
+    },
+    keys = {
+      { "<leader>gs", vim.cmd.Git, desc = "Open Git Status" },
+    },
+  },
+  {
+    "tpope/vim-rhubarb",
+    dependencies = {
+      "tpope/vim-fugitive",
+    },
+  },
 
   require "tbash.plugins.cmp",
   require "tbash.plugins.autotag",
