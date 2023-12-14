@@ -18,9 +18,9 @@ require("lazy").setup {
   "tpope/vim-rhubarb",
   "tpope/vim-fugitive",
   "tpope/vim-surround",
-  "windwp/nvim-ts-autotag",
 
   require "tbash.plugins.cmp",
+  require "tbash.plugins.autotag",
   require "tbash.plugins.colorscheme",
   require "tbash.plugins.comment",
   require "tbash.plugins.dadbod",
