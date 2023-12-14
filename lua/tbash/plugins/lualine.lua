@@ -8,7 +8,7 @@ return {
         icons_enabled = true,
         theme = "catppuccin",
         section_separators = "",
-        component_separators = "",
+        component_separators = "|",
       },
     }
   end,
