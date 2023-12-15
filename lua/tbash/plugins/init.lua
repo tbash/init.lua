@@ -34,7 +34,6 @@ require("lazy").setup {
   },
 
   require "tbash.plugins.cmp",
-  require "tbash.plugins.autotag",
   require "tbash.plugins.colorscheme",
   require "tbash.plugins.comment",
   require "tbash.plugins.dadbod",
