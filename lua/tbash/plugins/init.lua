@@ -26,12 +26,6 @@ require("lazy").setup {
       { "<leader>gs", vim.cmd.Git, desc = "Open Git Status" },
     },
   },
-  {
-    "tpope/vim-rhubarb",
-    dependencies = {
-      "tpope/vim-fugitive",
-    },
-  },
 
   require "tbash.plugins.cmp",
   require "tbash.plugins.colorscheme",
