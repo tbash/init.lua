@@ -130,9 +130,9 @@ return {
         { name = "path" },
       },
       formatting = {
-        fields = { "abbr", "kind" },
         format = function(_, vim_item)
-          vim_item.abbr = string.sub(vim_item.abbr, 1, 30)
+          vim_item.abbr = string.sub(vim_item.abbr, 1, 20)
+          vim_item.menu = ""
           return vim_item
         end,
       },

@@ -18,6 +18,7 @@ vim.opt.number = true
 vim.opt.colorcolumn = "80"
 vim.opt.hlsearch = false
 vim.opt.showmode = false
+vim.opt.showtabline = 0
 vim.opt.swapfile = false
 vim.opt.splitright = true
 vim.opt.splitbelow = true

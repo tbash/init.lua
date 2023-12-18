@@ -13,22 +13,29 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup {
+local lazyconfig = {
+  defaults = {
+    lazy = true,
+  },
+  ui = {
+    border = "rounded",
+  },
+}
+
+require("lazy").setup({
   "tpope/vim-sleuth",
   "tpope/vim-surround",
 
   {
     "tpope/vim-fugitive",
-    cmd = {
-      "Git",
-    },
+    cmd = { "Git" },
     keys = {
       { "<leader>gs", vim.cmd.Git, desc = "Open Git Status" },
     },
   },
 
-  require "tbash.plugins.cmp",
   require "tbash.plugins.colorscheme",
+  require "tbash.plugins.cmp",
   require "tbash.plugins.comment",
   require "tbash.plugins.dadbod",
   require "tbash.plugins.gitsigns",
@@ -38,4 +45,4 @@ require("lazy").setup {
   require "tbash.plugins.tree",
   require "tbash.plugins.treesitter",
   require "tbash.plugins.treesitter-context",
-}
+}, lazyconfig)

@@ -1,5 +1,6 @@
 return {
   "neovim/nvim-lspconfig",
+  lazy = false,
   dependencies = {
     -- format & linting
     {
