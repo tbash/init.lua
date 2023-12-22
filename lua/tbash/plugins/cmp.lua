@@ -73,11 +73,13 @@ return {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
+      "onsails/lspkind.nvim",
     },
   },
   config = function()
     local luasnip = require "luasnip"
     local cmp = require "cmp"
+    local lspkind = require "lspkind"
 
     cmp.setup {
       window = {
@@ -130,11 +132,16 @@ return {
         { name = "path" },
       },
       formatting = {
-        format = function(_, vim_item)
-          vim_item.abbr = string.sub(vim_item.abbr, 1, 20)
-          vim_item.menu = ""
-          return vim_item
-        end,
+        format = lspkind.cmp_format {
+          mode = "symbol_text",
+          maxwidth = 20,
+          ellipsis_char = "...",
+
+          before = function(_, vim_item)
+            vim_item.menu = ""
+            return vim_item
+          end,
+        },
       },
     }
   end,

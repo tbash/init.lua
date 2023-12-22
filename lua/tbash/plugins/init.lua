@@ -1,6 +1,6 @@
 return {
   "tpope/vim-sleuth",
-  "tpope/vim-surround",
+  { "tpope/vim-surround", lazy = false },
 
   {
     "tpope/vim-fugitive",
