@@ -17,7 +17,4 @@ return {
       desc = "Comment toggle current line",
     },
   },
-  config = function()
-    require("Comment").setup()
-  end,
 }
