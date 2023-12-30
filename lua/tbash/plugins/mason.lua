@@ -5,6 +5,9 @@ return {
   cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
   opts = {
     PATH = "skip",
+    ui = {
+      border = "rounded",
+    },
     ensure_installed = {
       -- lua stuff
       "lua-language-server",

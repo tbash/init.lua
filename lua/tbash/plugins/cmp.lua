@@ -1,16 +1,3 @@
-local function border(hl_name)
-  return {
-    { "╭", hl_name },
-    { "─", hl_name },
-    { "╮", hl_name },
-    { "│", hl_name },
-    { "╯", hl_name },
-    { "─", hl_name },
-    { "╰", hl_name },
-    { "│", hl_name },
-  }
-end
-
 return {
   "hrsh7th/nvim-cmp",
   event = "InsertEnter",
@@ -83,14 +70,12 @@ return {
 
     cmp.setup {
       window = {
-        completion = {
-          border = border "CmpBorder",
+        completion = cmp.config.window.bordered {
           side_padding = 1,
           winhighlight = "Normal:CmpPmenu,Search:None",
           scrollbar = false,
         },
-        documentation = {
-          border = border "CmpDocBorder",
+        documentation = cmp.config.window.bordered {
           winhighlight = "Normal:CmpDoc",
         },
       },
