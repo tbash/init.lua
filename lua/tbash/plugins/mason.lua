@@ -22,6 +22,7 @@ return {
       "ruby-lsp",
       "elm-language-server",
       "elm-format",
+      "eslint_d",
 
       -- c/cpp stuff
       "clangd",

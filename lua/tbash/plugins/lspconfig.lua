@@ -17,6 +17,7 @@ return {
           b.formatting.prettier.with {
             filetypes = { "html", "markdown", "css" },
           }, -- so prettier works only on these filetypes
+          b.diagnostics.eslint_d,
 
           -- Lua
           b.formatting.stylua,
