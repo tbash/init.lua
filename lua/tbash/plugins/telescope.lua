@@ -4,7 +4,17 @@ return {
   keys = {
     { "<C-p>", "<cmd>Telescope find_files<cr>", desc = "Find files" },
     { "<C-f>", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
-    { "<leader>;", "<cmd>Telescope buffers<cr>", desc = "Find in buffers" },
+    {
+      "<leader>;",
+      function()
+        require("telescope.builtin").buffers {
+          sort_mru = true,
+          sort_lastused = true,
+          ignore_current_buffer = true,
+        }
+      end,
+      desc = "Find in buffers",
+    },
   },
   dependencies = {
     "nvim-lua/plenary.nvim",
