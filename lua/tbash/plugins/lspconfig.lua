@@ -61,23 +61,22 @@ return {
       event = { "BufReadPre", "BufNewFile" },
     },
   },
+  keys = {
+    { "<space>e", vim.diagnostic.open_float },
+    { "[d", vim.diagnostic.goto_prev },
+    { "]d", vim.diagnostic.goto_next },
+    { "<space>q", vim.diagnostic.setloclist },
+    { "gd", vim.lsp.buf.definition },
+    { "K", vim.lsp.buf.hover },
+    { "<leader>rn", vim.lsp.buf.rename },
+    { "<leader>ca", vim.lsp.buf.code_action },
+    { "gr", vim.lsp.buf.references },
+    { "<leader>cl", vim.lsp.codelens.run },
+  },
   config = function()
     local lspconfig = require "lspconfig"
 
-    local on_attach = function(client, bufnr)
-      local opts = { buffer = bufnr, remap = false }
-
-      vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, opts)
-      vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-      vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-      vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
-      vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-      vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-      vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-      vim.keymap.set("n", "<leader>cl", vim.lsp.codelens.run, opts)
-
+    local on_attach = function(client, _)
       client.server_capabilities.documentFormattingProvider = false
       client.server_capabilities.documentRangeFormattingProvider = false
 
