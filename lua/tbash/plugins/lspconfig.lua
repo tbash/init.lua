@@ -17,7 +17,7 @@ return {
           b.formatting.prettier.with {
             filetypes = { "html", "markdown", "css" },
           }, -- so prettier works only on these filetypes
-          b.diagnostics.eslint_d,
+          b.formatting.rubocop,
 
           -- Lua
           b.formatting.stylua,
@@ -58,7 +58,6 @@ return {
     {
       "elixir-tools/elixir-tools.nvim",
       version = "*",
-      event = { "BufReadPre", "BufNewFile" },
     },
   },
   keys = {

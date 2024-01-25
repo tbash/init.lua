@@ -41,6 +41,12 @@ return {
       end,
     },
     {
+      "zbirenbaum/copilot-cmp",
+      config = function()
+        require("copilot_cmp").setup()
+      end,
+    },
+    {
       "saadparwaiz1/cmp_luasnip",
       "hrsh7th/cmp-nvim-lua",
       "hrsh7th/cmp-nvim-lsp",
@@ -96,6 +102,7 @@ return {
         end, { "i", "s" }),
       },
       sources = {
+        { name = "copilot" },
         { name = "nvim_lsp" },
         { name = "luasnip" },
         { name = "buffer" },
@@ -107,6 +114,7 @@ return {
           mode = "symbol_text",
           maxwidth = 20,
           ellipsis_char = "...",
+          symbol_map = { Copilot = "" },
 
           before = function(_, vim_item)
             vim_item.menu = ""

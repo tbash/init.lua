@@ -20,9 +20,9 @@ return {
       "deno",
       "prettier",
       "ruby-lsp",
+      "rubocop",
       "elm-language-server",
       "elm-format",
-      "eslint_d",
 
       -- c/cpp stuff
       "clangd",
