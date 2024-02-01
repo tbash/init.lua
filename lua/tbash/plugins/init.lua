@@ -1,12 +1,6 @@
 return {
-  "tpope/vim-sleuth",
-  { "tpope/vim-surround", lazy = false },
-
-  {
-    "tpope/vim-fugitive",
-    cmd = { "Git" },
-    keys = {
-      { "<leader>gs", vim.cmd.Git, desc = "Open Git Status" },
-    },
-  },
+  { "tpope/vim-repeat", event = "VeryLazy" },
+  { "tpope/vim-sleuth", event = "VeryLazy" },
+  { "tpope/vim-surround", event = "VeryLazy" },
+  { "tpope/vim-abolish", event = "VeryLazy" },
 }

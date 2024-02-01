@@ -1,6 +1,5 @@
 return {
   "numToStr/Comment.nvim",
-  lazy = false,
   keys = {
     {
       "<leader>/",
